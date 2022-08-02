@@ -6,8 +6,23 @@ const playerFactory = (playerNumber) => {
 
 const gameBoard = (() => {
   // 1 for blank spaces (not 'X' or 'O')
-  const board = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+  const boardArray = [1, 1, 1, 1, 1, 1, 1, 1, 1];
   return {
-    board
+    boardArray
+  };
+})();
+
+const displayController = (() => {
+  const display = document.querySelector('#display');
+  const board = document.createElement('div');
+  board.classList.add('game-board');
+  for (i = 0; i < 9; i++) {
+    const space = document.createElement('div');
+    space.textContent = 'X';
+    board.appendChild(space);
+  }
+  display.appendChild(board);
+  return {
+    display
   };
 })();
