@@ -4,6 +4,10 @@ const playerFactory = (playerNumber) => {
   return { playerNumber, sayHello };
 }
 
-// const player1 = playerFactory(1);
-// player1.sayHello();
-// console.log(player1.playerNumber);
+const gameBoard = (() => {
+  // 1 for blank spaces (not 'X' or 'O')
+  const board = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+  return {
+    board
+  };
+})();
