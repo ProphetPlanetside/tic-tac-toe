@@ -4,25 +4,42 @@ const playerFactory = (playerNumber) => {
   return { playerNumber, sayHello };
 }
 
+// Module for the game board
 const gameBoard = (() => {
   // 1 for blank spaces (not 'X' or 'O')
-  const boardArray = [1, 1, 1, 1, 1, 1, 1, 1, 1];
+  const boardArray = ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X'];
   return {
     boardArray
   };
 })();
 
+// module for the display controller
 const displayController = (() => {
   const display = document.querySelector('#display');
   const board = document.createElement('div');
   board.classList.add('game-board');
-  for (i = 0; i < 9; i++) {
-    const space = document.createElement('div');
-    space.textContent = 'X';
-    board.appendChild(space);
+  const displayBoard = () => {
+    // This while loop removes all children of board so that the board is
+    // "cleared." This resets the board so that the for loop doesn't create
+    // duplicate entries or new rows.
+    var child = board.lastElementChild;
+    while(child) {
+        board.removeChild(child);
+        child = board.lastElementChild;
+    }
+    for (i = 0; i < 9; i++) {
+      const space = document.createElement('div');
+      space.classList.add('space');
+      space.textContent = gameBoard.boardArray[i];
+      board.appendChild(space);
+    }
   }
+  displayBoard();
   display.appendChild(board);
-  return {
-    display
-  };
+  // Do I have to return anything? Does anything inside displayController() need
+  // to be accessed from somewhere else in my code?
+  // return {
+  //   display,
+  //   displayBoard
+  // };
 })();
