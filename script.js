@@ -6,7 +6,7 @@ const playerFactory = (playerNumber) => {
 
 // Module for the game board
 const gameBoard = (() => {
-  // 1 for blank spaces (not 'X' or 'O')
+  // Inserting X's and O's for now
   const boardArray = ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X'];
   return {
     boardArray
@@ -31,6 +31,7 @@ const displayController = (() => {
       const space = document.createElement('div');
       space.classList.add('space');
       space.textContent = gameBoard.boardArray[i];
+      space.addEventListener('click', () => {space.textContent = 'O';});
       board.appendChild(space);
     }
   }

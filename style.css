@@ -2,15 +2,17 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
-    text-align: center;
+    /* text-align: center; */
     gap: 20px;
 }
 
 .space {
-    background-color: blueviolet;
-    height: 30px;
-    width: 30px;
-    /* text-align: center; */
-    justify-self: center;
-    align-self: center;
+    background-color: rgb(153, 112, 192);
+    height: 200px;
+    width: 200px;
+    text-align: center;
+    /* Use line-height and text-align to center the text in the div 
+    vertically and horizontally. */
+    line-height: 192px;
+    font-size: 200px;
 }
