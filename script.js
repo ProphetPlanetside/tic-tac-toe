@@ -40,10 +40,15 @@ const displayController = (() => {
       space.textContent = gameBoard.boardArray[i];
       space.id = i;
       space.addEventListener('click', () => {
-        space.textContent = playerLetter;
-        gameBoard.boardArray[space.id] = playerLetter; 
-        gameController.count++;
-        gameController.gameTurn(gameController.count);
+        if (space.textContent != '') {
+          console.log('You cannot play there, that space is already taken.');
+        }
+        else {
+          space.textContent = playerLetter;
+          gameBoard.boardArray[space.id] = playerLetter; 
+          gameController.count++;
+          gameController.gameTurn(gameController.count);
+        }
       });
       board.appendChild(space);
     }
@@ -62,6 +67,7 @@ const gameController = (() => {
 
   // Displays the game board for the current player to make their move.
   const gameTurn = (playerTurn) => {
+    checkForWinner();
     if (playerTurn % 2 == 0) {
       displayController.displayBoard(player1.playerLetter);
     }
@@ -70,6 +76,13 @@ const gameController = (() => {
     }
   }
   
+  // This function should loop through the boardArray to find out if either player
+  // has won the game. If someone won, then end the game and congratulate the
+  // winner.
+  const checkForWinner = () => {
+
+  }
+
   // Initial function call to start the game and the first player's turn.
   gameTurn(0);
 
