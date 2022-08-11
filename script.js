@@ -6,8 +6,8 @@ const playerFactory = (playerNumber) => {
 
 // Module for the game board
 const gameBoard = (() => {
-  // Inserting X's and O's for now
-  const boardArray = ['X', 'O', 'X', 'O', 'X', 'O', 'X', 'O', 'X'];
+  // 9 elements for 9 spaces of the board
+  const boardArray = ['', '', '', '', '', '', '', '', ''];
   return {
     boardArray
   };
@@ -27,11 +27,16 @@ const displayController = (() => {
         board.removeChild(child);
         child = board.lastElementChild;
     }
+    console.log(gameBoard.boardArray);
+    // Displays the 3x3 board
     for (i = 0; i < 9; i++) {
       const space = document.createElement('div');
       space.classList.add('space');
       space.textContent = gameBoard.boardArray[i];
-      space.addEventListener('click', () => {space.textContent = 'O';});
+      space.id = i;
+      space.addEventListener('click', () => {space.textContent = 'O';
+        gameBoard.boardArray[space.id] = 'O'; 
+        console.log(gameBoard.boardArray);});
       board.appendChild(space);
     }
   }
