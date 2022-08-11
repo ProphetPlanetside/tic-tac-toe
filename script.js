@@ -1,7 +1,8 @@
 // Factory function for creating a player, dummy content for now.
-const playerFactory = (playerNumber) => {
-  const sayHello = () => console.log('Hello! I am player ' + playerNumber);
-  return { playerNumber, sayHello };
+const playerFactory = (playerNumber, playerLetter) => {
+  const sayHello = () => console.log('Hello! I am player ' + playerNumber +
+  ' and my letter is ' + playerLetter);
+  return { playerNumber, playerLetter, sayHello };
 }
 
 // Module for the game board
@@ -13,12 +14,16 @@ const gameBoard = (() => {
   };
 })();
 
+// I could pass in a value into the displayBoard() function that tells it
+// whose turn it is, which will help in determining if the game should input
+// an X or and O.
+
 // module for the display controller
 const displayController = (() => {
   const display = document.querySelector('#display');
   const board = document.createElement('div');
   board.classList.add('game-board');
-  const displayBoard = () => {
+  const displayBoard = (playerLetter) => {
     // This while loop removes all children of board so that the board is
     // "cleared." This resets the board so that the for loop doesn't create
     // duplicate entries or new rows.
@@ -27,25 +32,48 @@ const displayController = (() => {
         board.removeChild(child);
         child = board.lastElementChild;
     }
-    console.log(gameBoard.boardArray);
+    let notMadeMoveYet = true;
     // Displays the 3x3 board
     for (i = 0; i < 9; i++) {
       const space = document.createElement('div');
       space.classList.add('space');
       space.textContent = gameBoard.boardArray[i];
       space.id = i;
-      space.addEventListener('click', () => {space.textContent = 'O';
-        gameBoard.boardArray[space.id] = 'O'; 
-        console.log(gameBoard.boardArray);});
+      space.addEventListener('click', () => {
+        space.textContent = playerLetter;
+        gameBoard.boardArray[space.id] = playerLetter; 
+        gameController.count++;
+        gameController.gameTurn(gameController.count);
+      });
       board.appendChild(space);
     }
   }
-  displayBoard();
   display.appendChild(board);
-  // Do I have to return anything? Does anything inside displayController() need
-  // to be accessed from somewhere else in my code?
-  // return {
-  //   display,
-  //   displayBoard
-  // };
+  return {
+    displayBoard
+  };
+})();
+
+// Runs the game (module)
+const gameController = (() => {
+  const player1 = playerFactory(1, 'X');
+  const player2 = playerFactory(2, 'O');
+  let count = 0;
+
+  // Displays the game board for the current player to make their move.
+  const gameTurn = (playerTurn) => {
+    if (playerTurn % 2 == 0) {
+      displayController.displayBoard(player1.playerLetter);
+    }
+    else {
+      displayController.displayBoard(player2.playerLetter);
+    }
+  }
+  
+  // Initial function call to start the game and the first player's turn.
+  gameTurn(0);
+
+  return {
+    gameTurn, count
+  };
 })();
