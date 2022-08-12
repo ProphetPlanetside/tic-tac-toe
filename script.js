@@ -93,7 +93,7 @@ const displayController = (() => {
       space.id = i;
       space.addEventListener('click', () => {
         if (space.textContent != '') {
-          console.log('You cannot play there, that space is already taken.');
+          alert('You cannot play there, that space is already taken.');
         }
         else {
           space.textContent = playerLetter;
