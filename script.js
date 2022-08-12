@@ -14,7 +14,7 @@ const gameBoard = (() => {
   };
 })();
 
-// I could pass in a value into the displayBoard() function that tells it
+// I pass in a value into the displayBoard() function that tells it
 // whose turn it is, which will help in determining if the game should input
 // an X or and O.
 
@@ -23,6 +23,41 @@ const displayController = (() => {
   const display = document.querySelector('#display');
   const board = document.createElement('div');
   board.classList.add('game-board');
+
+  // Resets the values in the boardArray so that a new game can be played.
+  const resetBoard = () => {
+    console.log('reset board');
+  }
+
+  // Displays the game board without click listeners (used when the game is
+  // over, to prevent additional turns after the game is done.)
+  const displayBoardGameOver = () => {
+    // This while loop removes all children of board so that the board is
+    // "cleared." This resets the board so that the for loop doesn't create
+    // duplicate entries or new rows.
+    console.log('in the displayBoardGameOver function');
+    var child = board.lastElementChild;
+    while(child) {
+        board.removeChild(child);
+        child = board.lastElementChild;
+        console.log('child removed');
+    }
+    // Displays the 3x3 board
+    for (i = 0; i < 9; i++) {
+        const space = document.createElement('div');
+        space.classList.add('space');
+        space.textContent = gameBoard.boardArray[i];
+        space.id = i;
+        board.appendChild(space);
+      }
+      // Adds a button that asks if you want to play again (a new game).
+      const playAgainBtn = document.createElement('button');
+      playAgainBtn.textContent = "Play Again?";
+      playAgainBtn.addEventListener('click', () => resetBoard());
+      board.appendChild(playAgainBtn);
+  }
+
+  // Displays the game board with clickable spaces for playing the game.
   const displayBoard = (playerLetter) => {
     // This while loop removes all children of board so that the board is
     // "cleared." This resets the board so that the for loop doesn't create
@@ -48,6 +83,7 @@ const displayController = (() => {
           gameBoard.boardArray[space.id] = playerLetter; 
           gameController.count++;
           gameController.gameTurn(gameController.count);
+          gameController.checkForWinner(gameBoard.boardArray, playerLetter);
         }
       });
       board.appendChild(space);
@@ -55,8 +91,9 @@ const displayController = (() => {
   }
   display.appendChild(board);
   return {
-    displayBoard
+    displayBoard, displayBoardGameOver
   };
+
 })();
 
 // Runs the game (module)
@@ -67,7 +104,7 @@ const gameController = (() => {
 
   // Displays the game board for the current player to make their move.
   const gameTurn = (playerTurn) => {
-    checkForWinner();
+    // checkForWinner(gameBoard.boardArray);
     if (playerTurn % 2 == 0) {
       displayController.displayBoard(player1.playerLetter);
     }
@@ -78,15 +115,60 @@ const gameController = (() => {
   
   // This function should loop through the boardArray to find out if either player
   // has won the game. If someone won, then end the game and congratulate the
-  // winner.
-  const checkForWinner = () => {
-
+  // winner. Checks if there's a 3-in-a-row but also makes sure it's not a 
+  // 3-in-a-row of empty spaces.
+  const checkForWinner = (array, playerLetter) => {
+    // Left column
+    if (array[0] == array[3] && array[3] == array[6] && array[0] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // Middle Column
+    else if (array[1] == array[4] && array[4] == array[7] && array[1] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // Right column
+    else if (array[2] == array[5] && array[5] == array[8] && array[2] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // Top row
+    else if (array[0] == array[1] && array[1] == array[2] && array[0] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // Middle row
+    else if (array[3] == array[4] && array[4] == array[5] && array[3] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // Bottom row
+    else if (array[6] == array[7] && array[7] == array[8] && array[6] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // "\" Diagonal
+    else if (array[0] == array[4] && array[4] == array[8] && array[0] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // "/" Diagonal
+    else if (array[2] == array[4] && array[4] == array[6] && array[2] != '') {
+      console.log('Player ' + playerLetter + ' Wins!');
+      displayController.displayBoardGameOver();
+    }
+    // It's a tie when all spaces are taken and there are no 3-in-a-row's.
+    else if (gameController.count == 9) {
+      console.log("It's a Tie!");
+      displayController.displayBoardGameOver();
+    }
   }
 
   // Initial function call to start the game and the first player's turn.
   gameTurn(0);
 
   return {
-    gameTurn, count
+    gameTurn, count, checkForWinner
   };
 })();
