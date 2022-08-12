@@ -24,23 +24,40 @@ const displayController = (() => {
   const board = document.createElement('div');
   board.classList.add('game-board');
 
-  // Resets the values in the boardArray so that a new game can be played.
+  // Displays an element saying who won the game.
+  const displayWinner = (playerLetter) => {
+    if (playerLetter == 'N') {
+      const winnerElement = document.createElement('div');
+      winnerElement.textContent = "It's a Tie!";
+      winnerElement.classList.add('winner');
+      board.appendChild(winnerElement);
+    }
+    else {
+      const winnerElement = document.createElement('div');
+      winnerElement.textContent = 'Player ' + playerLetter + ' Wins!';
+      winnerElement.classList.add('winner');
+      board.appendChild(winnerElement);
+    }
+  }
+
+  // Resets the values in the boardArray so that a new game can be played, and
+  // starts a new game by resetting the play count to 0 and calling gameTurn().
   const resetBoard = () => {
-    console.log('reset board');
+    gameBoard.boardArray = ['', '', '', '', '', '', '', '', ''];
+    gameController.count = 0;
+    gameController.gameTurn(0);
   }
 
   // Displays the game board without click listeners (used when the game is
   // over, to prevent additional turns after the game is done.)
-  const displayBoardGameOver = () => {
+  const displayBoardGameOver = (playerLetter) => {
     // This while loop removes all children of board so that the board is
     // "cleared." This resets the board so that the for loop doesn't create
     // duplicate entries or new rows.
-    console.log('in the displayBoardGameOver function');
     var child = board.lastElementChild;
     while(child) {
         board.removeChild(child);
         child = board.lastElementChild;
-        console.log('child removed');
     }
     // Displays the 3x3 board
     for (i = 0; i < 9; i++) {
@@ -55,6 +72,7 @@ const displayController = (() => {
       playAgainBtn.textContent = "Play Again?";
       playAgainBtn.addEventListener('click', () => resetBoard());
       board.appendChild(playAgainBtn);
+      displayWinner(playerLetter);
   }
 
   // Displays the game board with clickable spaces for playing the game.
@@ -67,7 +85,6 @@ const displayController = (() => {
         board.removeChild(child);
         child = board.lastElementChild;
     }
-    let notMadeMoveYet = true;
     // Displays the 3x3 board
     for (i = 0; i < 9; i++) {
       const space = document.createElement('div');
@@ -91,7 +108,7 @@ const displayController = (() => {
   }
   display.appendChild(board);
   return {
-    displayBoard, displayBoardGameOver
+    displayBoard, displayBoardGameOver, displayWinner
   };
 
 })();
@@ -120,48 +137,39 @@ const gameController = (() => {
   const checkForWinner = (array, playerLetter) => {
     // Left column
     if (array[0] == array[3] && array[3] == array[6] && array[0] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // Middle Column
     else if (array[1] == array[4] && array[4] == array[7] && array[1] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // Right column
     else if (array[2] == array[5] && array[5] == array[8] && array[2] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // Top row
     else if (array[0] == array[1] && array[1] == array[2] && array[0] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // Middle row
     else if (array[3] == array[4] && array[4] == array[5] && array[3] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // Bottom row
     else if (array[6] == array[7] && array[7] == array[8] && array[6] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // "\" Diagonal
     else if (array[0] == array[4] && array[4] == array[8] && array[0] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // "/" Diagonal
     else if (array[2] == array[4] && array[4] == array[6] && array[2] != '') {
-      console.log('Player ' + playerLetter + ' Wins!');
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver(playerLetter);
     }
     // It's a tie when all spaces are taken and there are no 3-in-a-row's.
     else if (gameController.count == 9) {
-      console.log("It's a Tie!");
-      displayController.displayBoardGameOver();
+      displayController.displayBoardGameOver('N');
     }
   }
 
